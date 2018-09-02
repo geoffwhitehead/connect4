@@ -18,11 +18,9 @@ export default class PlayerList extends Component {
           if (loading) return <div>Loading...</div>;
           if (error) return <div>Error :(</div>;
 
-          return <p>{data.players}</p>;
+          return data.players.map(p => <p>{p.name}</p>);
         }}
       </Query>
     );
-    // console.log(this.props);
-    // return <p>playessr</p>;
   }
 }

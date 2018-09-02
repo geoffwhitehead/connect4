@@ -29,8 +29,8 @@ mongoose.connection
 
 app.use(bodyParser.json());
 
-app.use(cors());
-app.options("*", cors());
+// app.use(cors());
+// app.options("*", cors());
 // routes
 // app.options("/graphql", cors());
 // app.use("/graphql", function(req, res, next) {
@@ -69,29 +69,52 @@ app.options("*", cors());
 //   console.log("ROOT ");
 //   next();
 // });
+// app.use(
+//   "/graphql",
+//   cors(),
+//   (req, res, next) => {
+//     console.log("-GRAPH");
+//     res.header("Access-Control-Allow-Credentials", true);
+//     res.header(
+//       "Access-Control-Allow-Headers",
+//       "content-type, authorization, content-length, x-requested-with, accept, origin"
+//     );
+//     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+//     res.header("Allow", "POST, GET, OPTIONS");
+//     res.header("Access-Control-Allow-Origin", "*");
+//     console.log("HERE");
+//     if (req.method === "OPTIONS") {
+//       res.sendStatus(200);
+//     } else {
+//       next();
+//     }
+//   },
+//   expressGraphQL({
+//     schema,
+//     rootValue: root,
+//     graphiql: true
+//   })
+// );
+
+const corsOptions = {
+  origin(origin, callback) {
+    callback(null, true);
+  },
+  credentials: true
+};
+app.use(cors(corsOptions));
+var allowCrossDomain = function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type,token");
+  next();
+};
+app.use(allowCrossDomain);
+
 app.use(
   "/graphql",
-  cors(),
-  (req, res, next) => {
-    console.log("-GRAPH");
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header(
-      "Access-Control-Allow-Headers",
-      "content-type, authorization, content-length, x-requested-with, accept, origin"
-    );
-    res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-    res.header("Allow", "POST, GET, OPTIONS");
-    res.header("Access-Control-Allow-Origin", "*");
-    console.log("HERE");
-    if (req.method === "OPTIONS") {
-      res.sendStatus(200);
-    } else {
-      next();
-    }
-  },
   expressGraphQL({
     schema,
-    rootValue: root,
     graphiql: true
   })
 );
