@@ -8,7 +8,7 @@ const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
     addPlayer: {
-      type: SongType,
+      type: PlayerType,
       args: {
         title: { GraphQLString }
       },

@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.1",
+    "babel-loader": "7",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.3",
@@ -24,7 +24,9 @@
     "nodemon": "^1.18.4",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "style-loader": "^0.23.0"
+    "style-loader": "^0.23.0",
+    "webpack": "^4.17.1",
+    "webpack-dev-middleware": "^3.2.0"
   },
   "devDependencies": {
     "onchange": "^4.1.0",
