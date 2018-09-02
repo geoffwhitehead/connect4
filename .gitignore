@@ -71,3 +71,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Mongo config
+mongoConfig.js
