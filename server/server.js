@@ -29,8 +29,8 @@ mongoose.connection
 
 app.use(bodyParser.json());
 
-// app.use(cors());
-// app.options("*", cors());
+app.use(cors());
+app.options("*", cors());
 // routes
 // app.options("/graphql", cors());
 // app.use("/graphql", function(req, res, next) {
@@ -60,9 +60,20 @@ app.use(bodyParser.json());
 //   }))
 // );
 
+// app.use('/',
+// (req, res, next) => {
+//   console.log('asdasdasd ', req);
+//   next();
+// })
+// app.use("/", (req, res, next) => {
+//   console.log("ROOT ");
+//   next();
+// });
 app.use(
   "/graphql",
+  cors(),
   (req, res, next) => {
+    console.log("-GRAPH");
     res.header("Access-Control-Allow-Credentials", true);
     res.header(
       "Access-Control-Allow-Headers",
@@ -71,6 +82,7 @@ app.use(
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
     res.header("Allow", "POST, GET, OPTIONS");
     res.header("Access-Control-Allow-Origin", "*");
+    console.log("HERE");
     if (req.method === "OPTIONS") {
       res.sendStatus(200);
     } else {
@@ -79,6 +91,7 @@ app.use(
   },
   expressGraphQL({
     schema,
+    rootValue: root,
     graphiql: true
   })
 );
