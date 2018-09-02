@@ -10,7 +10,7 @@ const mutation = new GraphQLObjectType({
     addPlayer: {
       type: PlayerType,
       args: {
-        title: { GraphQLString }
+        name: { type: GraphQLString }
       },
       resolve(parentValue, { name }) {
         return new Player({ name }).save();
