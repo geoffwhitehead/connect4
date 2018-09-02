@@ -4,17 +4,16 @@ import { render } from "react-dom";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 
-import PlayerList from "components/PlayerList";
 import GameManager from "components/GameManager/GameManager";
 import NameInput from "components/common/NameInput/NameInput";
 import Title from "components/common/Title/Title";
+import StartScreen from "components/StartScreen/StartScreen";
 
 const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
 
 const App = () => (
   <ApolloProvider client={client}>
     <Title />
-    <PlayerList />
     <GameManager
       render={({
         hasStarted,
@@ -25,7 +24,7 @@ const App = () => (
         updateNameTwo
       }) => {
         if (!hasStarted) {
-          return <Welcome start={start} />;
+          return <StartScreen start={start} />;
         }
         if (!playerOne) {
           return (
