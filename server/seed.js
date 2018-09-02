@@ -8,15 +8,15 @@ const Player = mongoose.model("player");
 function seedPlayers(req, res) {
   // create some players
   const players = [
-    { name: 'SON', wins: 1 },
-    { name: 'MAR', wins: 5 },
-    { name: 'SOR', wins: 0 },
-    { name: 'AXE', wins: 2 },
-    { name: 'RYU', wins: 3 },
-    { name: 'KEN', wins: 2 },
-    { name: 'AXE', wins: 1 },
-    { name: 'LUI', wins: 0 },
-    { name: 'COM', wins: 4 }
+    { name: "SON", wins: 1 },
+    { name: "MAR", wins: 5 },
+    { name: "SOR", wins: 0 },
+    { name: "AXE", wins: 2 },
+    { name: "RYU", wins: 3 },
+    { name: "KEN", wins: 2 },
+    { name: "AXE", wins: 1 },
+    { name: "LUI", wins: 0 },
+    { name: "COM", wins: 4 }
   ];
 
   // use the Event model to insert/save
@@ -26,7 +26,7 @@ function seedPlayers(req, res) {
   }
 
   // seeded!
-  res.send('Database seeded!');
+  res.send("Database seeded!");
 }
 
-module.exports = seedPlayers
+module.exports = seedPlayers;
