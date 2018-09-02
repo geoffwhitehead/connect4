@@ -46,7 +46,15 @@ const App = () => (
                 value={playerTwo}
                 next={next}
               />
-              <BoardManager show={screen === 3} />
+              {screen === 3 && (
+                <BoardManager
+                  show={screen === 3}
+                  render={(board, addToken) => {
+                    console.log(board);
+                    return <p>Board</p>;
+                  }}
+                />
+              )}
             </div>
           );
         }}
