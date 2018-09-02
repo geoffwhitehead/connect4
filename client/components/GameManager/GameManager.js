@@ -8,9 +8,9 @@ export default class GameManager extends Component {
     screen: 0
   };
 
-  updateNameOne = val => {
-    this.setState({ playerOne: val });
-  };
+  updateNameOne = evt => this.setState({ playerOne: evt.target.value });
+
+  updateNameTwo = evt => this.setState({ playerTwo: evt.target.value });
 
   incrementScreen = () => this.setState({ screen: this.state.screen + 1 });
 
@@ -18,6 +18,7 @@ export default class GameManager extends Component {
     return this.props.render({
       ...this.state,
       updateNameOne: this.updateNameOne,
+      updateNameTwo: this.updateNameTwo,
       next: this.incrementScreen
     });
   }

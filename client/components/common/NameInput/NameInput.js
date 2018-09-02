@@ -1,11 +1,16 @@
 import React from "react";
 import Input from "components/common/Input/Input";
-import NextButton from "components/common/NextButton/NextButton";
 export default ({ next, show, ...rest }) => {
   return show ? (
-    <div>
-      <Input {...rest} />
-      <NextButton text="Next" onClick={next} />
-    </div>
+    <Input
+      {...rest}
+      action={{
+        color: "teal",
+        labelPosition: "right",
+        icon: "right arrow",
+        content: "Next",
+        onClick: next
+      }}
+    />
   ) : null;
 };
