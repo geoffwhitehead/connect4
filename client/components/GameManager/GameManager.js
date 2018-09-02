@@ -7,7 +7,8 @@ export default class GameManager extends Component {
   state = {
     playerOne: "",
     playerTwo: "",
-    board: []
+    board: [],
+    hasStarted: false
   };
 
   initBoard = () => {
@@ -18,12 +19,13 @@ export default class GameManager extends Component {
 
   addToken = column => {};
 
+  updateNameOne = val => {
+    this.setState({ playerOne: val });
+  };
+
   render() {
-    const { playerOne, playerTwo, board } = this.state;
     return this.props.render(
-      playerOne,
-      playerTwo,
-      // board,
+      { ...this.state, updateNameOne: this.updateNameOne }
       // this.initBoard,
       // this.addToken
     );
