@@ -8,46 +8,50 @@ import GameManager from "components/GameManager/GameManager";
 import NameInput from "components/common/NameInput/NameInput";
 import Title from "components/common/Title/Title";
 import StartScreen from "components/StartScreen/StartScreen";
+import BoardManager from "components/BoardManager/BoardManager";
 
 const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
 
 const App = () => (
   <ApolloProvider client={client}>
-    <Title />
-    <GameManager
-      render={({
-        hasStarted,
-        start,
-        playerOne,
-        playerTwo,
-        updateNameOne,
-        updateNameTwo
-      }) => {
-        if (!hasStarted) {
-          return <StartScreen start={start} />;
-        }
-        if (!playerOne) {
+    <div>
+      <Title />
+      <GameManager
+        render={({
+          next,
+          playerOne,
+          playerTwo,
+          updateNameOne,
+          updateNameTwo,
+          screen
+        }) => {
+          console.log("start", playerOne, playerTwo, screen);
+
           return (
-            <NameInput
-              label="Player One"
-              placeholder="Enter your name..."
-              onChange={updateNameOne}
-              value={playerOne}
-            />
+            <div>
+              <StartScreen show={screen === 0} next={next} />
+              <NameInput
+                show={screen === 1}
+                label="Player One"
+                placeholder="Enter your name..."
+                onChange={updateNameOne}
+                value={playerOne}
+                next={next}
+              />
+              <NameInput
+                show={screen === 2}
+                label="Player Two"
+                placeholder="Enter your name..."
+                onChange={updateNameTwo}
+                value={playerTwo}
+                next={next}
+              />
+              <BoardManager show={screen === 3} />
+            </div>
           );
-        }
-        if (!playerTwo) {
-          return (
-            <NameInput
-              label="Player Two"
-              placeholder="Enter your name..."
-              onChange={updateNameTwo}
-              value={playerTwo}
-            />
-          );
-        }
-      }}
-    />
+        }}
+      />
+    </div>
   </ApolloProvider>
 );
 render(<App />, document.getElementById("root"));
