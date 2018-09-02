@@ -29,7 +29,7 @@ module.exports = {
       template: "client/index.html"
     }),
     new webpack.DefinePlugin({
-      'GRAPHQL_URI': JSON.stringify("https://localhost:4000/graphql")
+      GRAPHQL_URI: JSON.stringify("https://localhost:4000/graphql")
     })
   ]
 };
