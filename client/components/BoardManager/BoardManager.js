@@ -10,8 +10,9 @@ export default class BoardManager extends Component {
 
   componentDidMount() {
     let board = this.state.board;
-    for (let i = 0; i < ROWS; i++) {
-      board.push([]);
+    board.push([0, 1, 2, 3, 4, 5, 6]);
+    for (let i = 0; i < ROWS - 1; i++) {
+      board.push([0, 0, 0, 0, 0, 0, 0]);
     }
     this.setState({ board: board });
   }

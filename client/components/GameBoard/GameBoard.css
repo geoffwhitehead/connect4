@@ -1,0 +1,11 @@
+.grid {
+  display: grid;
+  height: 60%;
+  grid-template: repeat(7, 1fr) / repeat(6, 1fr);
+  grid-gap: 10px;
+}
+
+.cell {
+  display: block;
+  background-color: green;
+}

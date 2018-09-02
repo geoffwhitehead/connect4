@@ -9,6 +9,7 @@ import NameInput from "components/common/NameInput/NameInput";
 import Title from "components/common/Title/Title";
 import StartScreen from "components/StartScreen/StartScreen";
 import BoardManager from "components/BoardManager/BoardManager";
+import GameBoard from "components/GameBoard/GameBoard";
 
 const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
 
@@ -49,9 +50,8 @@ const App = () => (
               {screen === 3 && (
                 <BoardManager
                   show={screen === 3}
-                  render={(board, addToken) => {
-                    console.log(board);
-                    return <p>Board</p>;
+                  render={({ board, addToken }) => {
+                    return <GameBoard board={board} />;
                   }}
                 />
               )}

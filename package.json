@@ -20,6 +20,7 @@
     "express-graphql": "^0.6.12",
     "graphql": "^14.0.0",
     "graphql-tag": "^2.9.2",
+    "lodash": "^4.17.10",
     "mongoose": "^5.2.12",
     "nodemon": "^1.18.4",
     "react": "^16.4.2",
