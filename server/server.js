@@ -1,6 +1,6 @@
 const express = require("express");
 const models = require("./models");
-const graphqlHTTP = require("express-graphql"); // CommonJS
+const expressGraphQL = require("express-graphql"); // CommonJS
 const webpackMiddleware = require("webpack-dev-middleware");
 const webpack = require("webpack");
 const webpackConfig = require("../webpack.config.js");
@@ -33,24 +33,54 @@ app.use(bodyParser.json());
 // app.options("*", cors());
 // routes
 // app.options("/graphql", cors());
-app.use("/graphql", function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Content-Length, X-Requested-With"
-  );
-  if (req.method === "OPTIONS") {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+// app.use("/graphql", function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Credentials", true);
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "content-type, authorization, content-length, x-requested-with, accept, origin"
+//   );
+//   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+//   res.header("Allow", "POST, GET, OPTIONS");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Content-Type, Authorization, Content-Length, X-Requested-With"
+//   );
+//   if (req.method === "OPTIONS") {
+//     res.sendStatus(200);
+//   } else {
+//     next();
+//   }
+// });
+// app.use(
+//   "/graphql",
+//   expressGraphQL(() => ({
+//     schema,
+//     graphiql: true
+//   }))
+// );
+
 app.use(
   "/graphql",
-  graphqlHTTP(() => ({
+  (req, res, next) => {
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header(
+      "Access-Control-Allow-Headers",
+      "content-type, authorization, content-length, x-requested-with, accept, origin"
+    );
+    res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+    res.header("Allow", "POST, GET, OPTIONS");
+    res.header("Access-Control-Allow-Origin", "*");
+    if (req.method === "OPTIONS") {
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  },
+  expressGraphQL({
     schema,
     graphiql: true
-  }))
+  })
 );
 
 app.use("/seed", seed);
