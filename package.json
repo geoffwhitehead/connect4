@@ -5,17 +5,14 @@
   "main": "index.js",
   "scripts": {
     "prettier": "onchange '**/*.js' -- prettier --write {{changed}}",
-    "dev": "nodemon index.js --ignore client"
+    "server": "nodemon index.js --ignore client",
+    "build": "webpack --mode production",
+    "client": "webpack-dev-server --open --mode development"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "apollo-boost": "^0.1.15",
-    "babel-core": "^6.26.3",
-    "babel-loader": "7",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "css-loader": "^1.0.0",
@@ -23,18 +20,26 @@
     "express-graphql": "^0.6.12",
     "graphql": "^14.0.0",
     "graphql-tag": "^2.9.2",
-    "html-webpack-plugin": "^3.2.0",
     "mongoose": "^5.2.12",
     "nodemon": "^1.18.4",
     "react": "^16.4.2",
     "react-apollo": "^2.1.11",
     "react-dom": "^16.4.2",
-    "style-loader": "^0.23.0",
-    "webpack": "^4.17.1",
-    "webpack-dev-middleware": "^3.2.0"
+    "style-loader": "^0.23.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "7",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "html-webpack-plugin": "^3.2.0",
     "onchange": "^4.1.0",
-    "prettier": "^1.14.2"
+    "prettier": "^1.14.2",
+    "react-hot-loader": "^4.3.5",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-middleware": "^3.2.0",
+    "webpack-dev-server": "^3.1.7"
   }
 }

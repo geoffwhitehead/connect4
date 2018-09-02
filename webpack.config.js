@@ -28,6 +28,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "client/index.html"
     }),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       GRAPHQL_URI: JSON.stringify("https://localhost:4000/graphql")
     })
