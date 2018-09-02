@@ -2,6 +2,10 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+  resolve: {
+    modules: ["client", "node_modules"],
+    extensions: ["*", ".js", ".jsx", ".json"]
+  },
   entry: "./client/index.js",
   output: {
     path: "/",

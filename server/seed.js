@@ -28,3 +28,5 @@ function seedPlayers(req, res) {
   // seeded!
   res.send('Database seeded!');
 }
+
+module.exports = seedPlayers
