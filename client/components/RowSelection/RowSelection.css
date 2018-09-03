@@ -1,12 +1,13 @@
 .grid {
   display: grid;
   height: 5rem;
+  width: 100%;
   grid-template-columns: repeat(7, 5.5rem);
   grid-gap: 5px;
   margin-bottom: 15px;
 }
 
 .column {
-  display: block;
   background-color: yellow;
+  height: 100%
 }

@@ -1,0 +1,19 @@
+.nav {
+  background: linear-gradient(-45deg, #6793ca23, #9fbbc223, #a3b35f1f, #35835c3a);
+	background-size: 400% 400%;
+	-webkit-animation: Gradient 15s ease infinite;
+	-moz-animation: Gradient 15s ease infinite;
+  animation: Gradient 15s ease infinite;
+  box-shadow: 0px 2px 3px #888888;
+  
+  
+  color: white;
+  text-shadow: 2px 2px #888888;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.header {
+  line-height: 60px;
+  
+}
