@@ -50,11 +50,15 @@ const App = () => (
               />
               {screen === 3 && (
                 <div>
-                  <RowSelection selectColumn={() => console.log("asd")} />
                   <BoardManager
                     show={screen === 3}
                     render={({ board, addToken }) => {
-                      return <GameBoard board={board} />;
+                      return (
+                        <div>
+                          <RowSelection selectColumn={addToken} />
+                          <GameBoard board={board} />
+                        </div>
+                      );
                     }}
                   />
                 </div>

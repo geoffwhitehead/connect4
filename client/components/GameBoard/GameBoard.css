@@ -1,11 +1,13 @@
 .grid {
   display: grid;
-  height: 60%;
-  grid-template: repeat(7, 1fr) / repeat(6, 1fr);
-  grid-gap: 10px;
+  height: calc(6 * 5rem + 5*5px);
+  width: calc(7 * 5rem + 6*5px);
+  grid-template: repeat(6, 5rem) / repeat(7, 5rem);
+  grid-gap: 5px;
+  background-color: grey;
 }
 
 .cell {
   display: block;
-  background-color: green;
+  background-color: white;
 }

@@ -4,7 +4,7 @@ import css from "./RowSelection.css";
 export default ({ selectColumn }) => {
   const rows = () => {
     let columns = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       columns.push(
         <div className={css.column} onClick={() => selectColumn(i)} />
       );
