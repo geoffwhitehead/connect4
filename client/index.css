@@ -1,0 +1,10 @@
+.grid {
+  display: grid;
+  grid-template-rows: 15% auto 15%;
+  justify-content: center;
+  height: 100vh
+}
+.main {
+  grid-row: 2;
+  grid-column: 1;
+}
