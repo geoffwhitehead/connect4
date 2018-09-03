@@ -9,6 +9,7 @@ export default class BoardManager extends Component {
     turn: 0
   };
 
+  // initialize the game board
   componentDidMount() {
     let board = this.state.board;
     board.push([0, 1, 2, 1, 1, 2, 2]);
@@ -19,6 +20,7 @@ export default class BoardManager extends Component {
     // console.log("mount ", this.state.board);
   }
 
+  // inserts a token into the board at the selected position
   dropToken = (row, col, color) => {
     // console.log("DROP ", col, row);
     // console.log("current board ", this.state.board);
@@ -28,9 +30,12 @@ export default class BoardManager extends Component {
     // console.log("BOARD ", board);
   };
 
+  // returns true if it is possible to insert another token in the selected column
   isValidColumn = col => {
     return this.state.board[ROWS_COUNT - 1][col] === 0;
   };
+
+  // returns the next position where a token can be inserted on the selected column
   findOpenRowPosition = (col, row = 0) => {
     // console.log("FIND ", col, row);
     const { board } = this.state;
@@ -41,6 +46,7 @@ export default class BoardManager extends Component {
     return this.findOpenRowPosition(col, row + 1);
   };
 
+  // returns true if the placement is valid and a token is successfully added to the board
   addToken = col => {
     // console.log("col ", col);
     if (!this.isValidColumn(col)) return false;
@@ -64,46 +70,72 @@ export default class BoardManager extends Component {
     console.log("WIN X ", win);
     // check diag up
     pos = this.calcStartXY(row, col);
-    console.log("POS ", row, col, " START: ", pos);
+    // console.log("POS ", row, col, " START: ", pos);
     win = this.isAxisXYWin(currentPlayer, pos.row, pos.col);
     console.log("WIN XY ", win);
+    pos = this.calcStartXYFlipped(row, col);
+    // console.log("POS ", row, col, " START: ", pos);
+    win = this.isAxisXYFlippedWin(currentPlayer, pos.row, pos.col);
+    console.log("WIN XYFLIPPED ", win);
     // check diag down
   };
 
+  // returns the first token in the selected column
   calcStartY = (row, col) => ({ row: 0, col });
+
+  // returns the first token in the selected row
   calcStartX = (row, col) => ({ row, col: 0 });
+
+  // returns where either the x or y intersects on the left side of diagonal line
   calcStartXY = (row, col) => {
     const min = Math.min(row, col);
-    return { row: row - Math.min(row, col), col: col - Math.min(row, col) };
-  };
-  calcStartXYFlipped = (row, col) => {
-    const min = Math.min(ROWS_COUNT - row, COLS - col);
-    return { row: row + min, col: col + min };
+    return { row: row - min, col: col - min };
   };
 
+  // returns where either the x or y intersects on the left side of diagonal line flipped
+  calcStartXYFlipped = (row, col) => {
+    const min = Math.min(ROWS_COUNT - 1 - row, col);
+    return { row: row + min, col: col - min };
+  };
+
+  // returns true if it finds 4 consecutive tokens in a vertical line
   isAxisYWin = (player, row, col, count = 0) => {
     // console.log("vert ", count);
     if (count === 4) return true;
-    if (row === ROWS_COUNT) return false;
+    if (this.isOutOfBounds(row, col)) return false;
     this.state.board[row][col] === player ? count++ : (count = 0);
     return this.isAxisYWin(player, row + 1, col, count);
   };
 
+  // returns true if it finds 4 consecutive tokens in a horizontal line
   isAxisXWin = (player, row, col, count = 0) => {
     // console.log("x  ", count);
     if (count === 4) return true;
-    if (col === COLUMNS_COUNT) return false;
+    if (this.isOutOfBounds(row, col)) return false;
     this.state.board[row][col] === player ? count++ : (count = 0);
     return this.isAxisXWin(player, row, col + 1, count);
   };
 
+  // returns true if it finds 4 consecutive tokens in a diagonal line
   isAxisXYWin = (player, row, col, count = 0) => {
     // console.log("x  ", count);
     if (count === 4) return true;
-    if (col === COLUMNS_COUNT || row === ROWS_COUNT) return false;
+    if (this.isOutOfBounds(row, col)) return false;
     this.state.board[row][col] === player ? count++ : (count = 0);
     return this.isAxisXYWin(player, row + 1, col + 1, count);
   };
+
+  // returns true if it finds 4 consecutive tokens in a diagonal line flipped.
+  isAxisXYFlippedWin = (player, row, col, count = 0) => {
+    // console.log("x  ", row, col, count, this.isOutOfBounds(ROWS_COUNT - 1, 1));
+    if (count === 4) return true;
+    if (this.isOutOfBounds(row, col)) return false;
+    this.state.board[row][col] === player ? count++ : (count = 0);
+    return this.isAxisXYFlippedWin(player, row - 1, col + 1, count);
+  };
+
+  isOutOfBounds = (row, col) =>
+    col >= COLUMNS_COUNT || col <= -1 || row >= ROWS_COUNT || row <= -1;
 
   render() {
     return this.props.render({ ...this.state, addToken: this.addToken });
