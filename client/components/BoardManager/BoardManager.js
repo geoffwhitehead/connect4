@@ -5,7 +5,8 @@ const ROWS = 6;
 
 export default class BoardManager extends Component {
   state = {
-    board: []
+    board: [],
+    turn: 0
   };
 
   componentDidMount() {
@@ -17,7 +18,18 @@ export default class BoardManager extends Component {
     this.setState({ board: board });
   }
 
-  addToken = column => {};
+  dropToken = (col, row, color) => {};
+
+  isValidColumn = () => {};
+
+  findOpenRowPosition = () => {};
+
+  addToken = column => {
+    if (!this.isValidColumn(column)) return false;
+    let row = this.findOpenRowPosition(column);
+    this.dropToken(column, row, turn % 2);
+    return true;
+  };
 
   render() {
     return this.props.render({ ...this.state, addToken: this.addToken });
