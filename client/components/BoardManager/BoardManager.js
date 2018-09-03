@@ -38,21 +38,23 @@ export default class BoardManager extends Component {
 
   // returns true if the placement is valid and a token is successfully added to the board
   addToken = col => {
+    console.log(this.state.turn);
     let player = (this.state.turn % 2) + 1;
     if (!this.isValidColumn(col)) return false;
     let row = this.findOpenRowPosition(col);
     this.dropToken(row, col, player);
     if (this.checkWin(row, col, player)) this.setState({ winner: player });
+    this.setState({ turn: this.state.turn + 1 });
     return true;
   };
 
   checkWin = (row, col, player) => {
-    if (this.checkForWin(player, 0, col, 1, 0)) return true; // check Y
-    if (this.checkForWin(player, row, 0, 0, 1)) return true; // check X
+    if (this.checkTokens(player, 0, col, 1, 0)) return true; // check Y
+    if (this.checkTokens(player, row, 0, 0, 1)) return true; // check X
     let pos = this.calcStartXY(row, col);
-    if (this.checkForWin(player, pos.row, pos.col, 1, 1)) return true; // check XY - diagonal up
+    if (this.checkTokens(player, pos.row, pos.col, 1, 1)) return true; // check XY - diagonal up
     pos = this.calcStartXYFlipped(row, col);
-    if (this.checkForWin(player, pos.row, pos.col, -1, 1)) return true; // check XY diagonal down
+    if (this.checkTokens(player, pos.row, pos.col, -1, 1)) return true; // check XY diagonal down
     return false; // no win was found
   };
 
@@ -70,12 +72,12 @@ export default class BoardManager extends Component {
 
   // returns true if it finds 4 consecutive tokens
   // rAdj and cAdj are the amounts to increment the row ad column by. This determines the line direction
-  checkForWin = (player, row, col, rAdj, cAdj, count = 0) => {
+  checkTokens = (player, row, col, rAdj, cAdj, count = 0) => {
     if (count === WIN_COUNT) return true;
     if (col >= COLUMNS_COUNT || col <= -1 || row >= ROWS_COUNT || row <= -1)
       return false;
     this.state.board[row][col] === player ? count++ : (count = 0);
-    return this.checkForWin(player, row + rAdj, col + cAdj, rAdj, cAdj, count);
+    return this.checkTokens(player, row + rAdj, col + cAdj, rAdj, cAdj, count);
   };
 
   render() {

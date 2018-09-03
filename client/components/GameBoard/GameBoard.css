@@ -1,8 +1,8 @@
 .grid {
   display: grid;
-  height: calc(6 * 5rem + 5*5px);
-  width: calc(7 * 5rem + 6*5px);
-  grid-template: repeat(6, 5rem) / repeat(7, 5rem);
+  height: calc(6 * 5.5rem + 5*5px);
+  width: calc(7 * 5.5rem + 6*5px);
+  grid-template: repeat(6, 5.5rem) / repeat(7, 5.5rem);
   grid-gap: 5px;
   background-color: grey;
 }

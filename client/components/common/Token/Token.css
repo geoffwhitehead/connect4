@@ -1,9 +1,11 @@
 .one {
-  background-color: red
+  background-color: red;
+  box-shadow: 2px 3px darkred;
 }
 
 .two {
-  background-color: yellow
+  background-color: yellow;
+  box-shadow: 2px 3px darkgoldenrod;
 }
 
 .token {

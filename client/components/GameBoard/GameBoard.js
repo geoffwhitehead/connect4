@@ -13,7 +13,7 @@ export default ({ board }) => {
             row.map((cell, j) => {
               return (
                 <div key={`r${i}c${j}`} className={css.cell}>
-                  {cell > 0 ? <Token player={cell} /> : <p>null</p>}
+                  {cell > 0 ? <Token player={cell} /> : null}
                 </div>
               );
             })

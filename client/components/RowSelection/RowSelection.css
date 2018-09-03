@@ -1,7 +1,7 @@
 .grid {
   display: grid;
   height: 5rem;
-  grid-template-columns: repeat(7, 5rem);
+  grid-template-columns: repeat(7, 5.5rem);
   grid-gap: 5px;
   margin-bottom: 15px;
 }
