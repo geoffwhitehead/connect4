@@ -52,11 +52,19 @@ const App = () => (
                 <div>
                   <BoardManager
                     show={screen === 3}
-                    render={({ board, addToken }) => {
+                    render={({ board, addToken, winner }) => {
                       return (
                         <div>
-                          <RowSelection selectColumn={addToken} />
+                          <RowSelection
+                            disabled={winner}
+                            selectColumn={addToken}
+                          />
                           <GameBoard board={board} />
+                          {winner ? (
+                            <p>{`winner: ${winner}`}</p>
+                          ) : (
+                            <p>No winner</p>
+                          )}
                         </div>
                       );
                     }}

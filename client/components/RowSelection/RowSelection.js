@@ -1,12 +1,14 @@
 import React from "react";
 import css from "./RowSelection.css";
 
-export default ({ selectColumn }) => {
+export default ({ selectColumn, disabled }) => {
+  const handleSelect = index => !disabled && selectColumn(index);
+
   const rows = () => {
     let columns = [];
     for (let i = 0; i < 7; i++) {
       columns.push(
-        <div className={css.column} onClick={() => selectColumn(i)} />
+        <div className={css.column} onClick={handleSelect.bind(this, i)} />
       );
     }
     return columns;

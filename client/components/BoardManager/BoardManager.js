@@ -14,8 +14,7 @@ export default class BoardManager extends Component {
   // initialize the game board
   componentDidMount() {
     let board = this.state.board;
-    board.push([0, 1, 2, 1, 1, 2, 2]);
-    for (let i = 0; i < ROWS_COUNT - 1; i++) {
+    for (let i = 0; i < ROWS_COUNT; i++) {
       board.push([0, 0, 0, 0, 0, 0, 0]);
     }
     this.setState({ board: board });
@@ -44,7 +43,6 @@ export default class BoardManager extends Component {
     let row = this.findOpenRowPosition(col);
     this.dropToken(row, col, player);
     if (this.checkWin(row, col, player)) this.setState({ winner: player });
-    console.log("win ", win);
     return true;
   };
 
@@ -74,13 +72,11 @@ export default class BoardManager extends Component {
   // rAdj and cAdj are the amounts to increment the row ad column by. This determines the line direction
   checkForWin = (player, row, col, rAdj, cAdj, count = 0) => {
     if (count === WIN_COUNT) return true;
-    if (this.isOutOfBounds(row, col)) return false;
+    if (col >= COLUMNS_COUNT || col <= -1 || row >= ROWS_COUNT || row <= -1)
+      return false;
     this.state.board[row][col] === player ? count++ : (count = 0);
     return this.checkForWin(player, row + rAdj, col + cAdj, rAdj, cAdj, count);
   };
-
-  isOutOfBounds = (row, col) =>
-    col >= COLUMNS_COUNT || col <= -1 || row >= ROWS_COUNT || row <= -1;
 
   render() {
     return this.props.render({ ...this.state, addToken: this.addToken });
