@@ -24,9 +24,7 @@ export default class BoardManager extends Component {
     this.setState({ board });
   };
 
-  isValidColumn = column => {
-    return this.state.board[6][column] !== 0;
-  };
+  isValidColumn = column => this.state.board[ROWS][column] !== 0;
 
   findOpenRowPosition = (column, row = 0) => {
     const { board } = this.state;
@@ -39,7 +37,7 @@ export default class BoardManager extends Component {
   addToken = column => {
     if (!this.isValidColumn(column)) return false;
     let row = this.findOpenRowPosition(column);
-    this.dropToken(row, column, turn % 2);
+    this.dropToken(row, column, (this.state.turn % 2) + 1);
     return true;
   };
 
