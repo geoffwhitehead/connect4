@@ -1,6 +1,5 @@
 import React from "react";
 import css from "./GameBoard.css";
-import isEmpty from "lodash/isEmpty";
 import Token from "components/common/Token/Token";
 
 export default ({ board }) => {
@@ -10,10 +9,10 @@ export default ({ board }) => {
         board
           .slice(0)
           .reverse()
-          .map(row =>
-            row.map((cell, i) => {
+          .map((row, i) =>
+            row.map((cell, j) => {
               return (
-                <div key={i} className={css.cell}>
+                <div key={`r${i}c${j}`} className={css.cell}>
                   {cell > 0 ? <Token player={cell} /> : <p>null</p>}
                 </div>
               );

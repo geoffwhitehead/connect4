@@ -16,36 +16,36 @@ export default class BoardManager extends Component {
       board.push([0, 0, 0, 0, 0, 0, 0]);
     }
     this.setState({ board: board });
-    console.log("mount ", this.state.board);
+    // console.log("mount ", this.state.board);
   }
 
   dropToken = (row, col, color) => {
-    console.log("DROP ", col, row);
-    console.log("current board ", this.state.board);
+    // console.log("DROP ", col, row);
+    // console.log("current board ", this.state.board);
     let board = this.state.board;
     board[row][col] = color;
     this.setState({ board });
-    console.log("BOARD ", board);
+    // console.log("BOARD ", board);
   };
 
   isValidColumn = col => {
     return this.state.board[ROWS_COUNT - 1][col] === 0;
   };
   findOpenRowPosition = (col, row = 0) => {
-    console.log("FIND ", col, row);
+    // console.log("FIND ", col, row);
     const { board } = this.state;
     if (board[row][col] === 0) {
-      console.log("returning row: ", row);
+      // console.log("returning row: ", row);
       return row;
     }
     return this.findOpenRowPosition(col, row + 1);
   };
 
   addToken = col => {
-    console.log("col ", col);
+    // console.log("col ", col);
     if (!this.isValidColumn(col)) return false;
     let row = this.findOpenRowPosition(col);
-    console.log("ROW: ", row);
+    // console.log("ROW: ", row);
     let currentPlayer = (this.state.turn % 2) + 1;
     this.dropToken(row, col, currentPlayer);
     this.checkWin(row, col);
@@ -63,8 +63,10 @@ export default class BoardManager extends Component {
     win = this.isAxisXWin(currentPlayer, pos.row, pos.col);
     console.log("WIN X ", win);
     // check diag up
-    // pos = this.calcStartX(row, col);
-    // console.log("POS ", , win);
+    pos = this.calcStartXY(row, col);
+    console.log("POS ", row, col, " START: ", pos);
+    win = this.isAxisXYWin(currentPlayer, pos.row, pos.col);
+    console.log("WIN XY ", win);
     // check diag down
   };
 
@@ -95,13 +97,13 @@ export default class BoardManager extends Component {
     return this.isAxisXWin(player, row, col + 1, count);
   };
 
-  // isAxisXWin = (player, row, col, count = 0) => {
-  //   console.log("x  ", count);
-  //   if (count === 4) return true;
-  //   if (col === COLUMNS_COUNT) return false;
-  //   this.state.board[row][col] === player ? count++ : (count = 0);
-  //   return this.isAxisXWin(player, row, col + 1, count);
-  // };
+  isAxisXYWin = (player, row, col, count = 0) => {
+    // console.log("x  ", count);
+    if (count === 4) return true;
+    if (col === COLUMNS_COUNT || row === ROWS_COUNT) return false;
+    this.state.board[row][col] === player ? count++ : (count = 0);
+    return this.isAxisXYWin(player, row + 1, col + 1, count);
+  };
 
   render() {
     return this.props.render({ ...this.state, addToken: this.addToken });
