@@ -11,9 +11,9 @@ export default ({ board }) => {
           .slice(0)
           .reverse()
           .map(row =>
-            row.map(cell => {
+            row.map((cell, i) => {
               return (
-                <div className={css.cell}>
+                <div key={i} className={css.cell}>
                   {cell > 0 ? <Token player={cell} /> : <p>null</p>}
                 </div>
               );
