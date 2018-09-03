@@ -7,6 +7,10 @@
   background-color: grey;
 }
 
+.disabled {
+  opacity: 0.2
+}
+
 .cell {
   display: block;
   background-color: white;

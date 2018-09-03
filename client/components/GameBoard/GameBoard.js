@@ -2,9 +2,10 @@ import React from "react";
 import css from "./GameBoard.css";
 import Token from "components/common/Token/Token";
 
-export default ({ board }) => {
+export default ({ board, disabled }) => {
+  let style = disabled ? css.disabled : null;
   return (
-    <div className={css.grid}>
+    <div className={`${css.grid} ${style}`}>
       {board.length > 0 &&
         board
           .slice(0)

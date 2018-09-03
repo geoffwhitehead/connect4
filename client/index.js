@@ -59,7 +59,7 @@ const App = () => (
                             disabled={winner}
                             selectColumn={addToken}
                           />
-                          <GameBoard board={board} />
+                          <GameBoard disabled={winner} board={board} />
                           {winner ? (
                             <p>{`winner: ${winner}`}</p>
                           ) : (
