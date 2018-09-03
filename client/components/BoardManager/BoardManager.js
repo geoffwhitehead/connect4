@@ -18,16 +18,28 @@ export default class BoardManager extends Component {
     this.setState({ board: board });
   }
 
-  dropToken = (col, row, color) => {};
+  dropToken = (col, row, color) => {
+    let board = this.state.board;
+    board[row][col] = color;
+    this.setState({ board });
+  };
 
-  isValidColumn = () => {};
+  isValidColumn = column => {
+    return this.state.board[6][column] !== 0;
+  };
 
-  findOpenRowPosition = () => {};
+  findOpenRowPosition = (column, row = 0) => {
+    const { board } = this.state;
+    if (board[row][column] === 0) {
+      return row;
+    }
+    this.findOpenRowPosition(column, row + 1);
+  };
 
   addToken = column => {
     if (!this.isValidColumn(column)) return false;
     let row = this.findOpenRowPosition(column);
-    this.dropToken(column, row, turn % 2);
+    this.dropToken(row, column, turn % 2);
     return true;
   };
 
