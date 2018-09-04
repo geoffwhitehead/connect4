@@ -1,5 +1,5 @@
 import React from "react";
-import css from "./GameBoard.css";
+import css from "./GameBoard.scss";
 import Token from "components/common/Token/Token";
 
 export default ({ board, disabled }) => {

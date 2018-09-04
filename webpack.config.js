@@ -19,6 +19,37 @@ module.exports = {
         exclude: /node_modules/
       },
       {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              modules: true,
+              localIdentName: "[name]__[local]___[hash:base64:5]"
+            }
+          },
+          {
+            loader: "sass-loader"
+          }
+        ]
+        // use: [
+        //   "style-loader",
+        //   {
+        //     loader: "sass-loader",
+        //     options: {
+        //       importLoaders: 1,
+        //       modules: true,
+        //       localIdentName: "[name]__[local]___[hash:base64:5]"
+        //     }
+        //   },
+        //   "css-loader"
+        // ]
+      },
+      {
         test: /\.css$/,
         use: [
           "style-loader",
@@ -32,6 +63,13 @@ module.exports = {
           }
         ]
       }
+      // {
+      //   test: /\.scss$/,
+      //   use: ExtractTextPlugin.extract({
+      //     fallback: "style-loader",
+      //     use: ["css-loader", "sass-loader"]
+      //   })
+      // }
     ]
   },
   plugins: [

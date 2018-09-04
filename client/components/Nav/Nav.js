@@ -1,5 +1,5 @@
 import React from "react";
-import css from "./Nav.css";
+import css from "./Nav.scss";
 
 export default () => (
   <div className={css.nav}>

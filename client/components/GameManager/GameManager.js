@@ -5,7 +5,7 @@ export default class GameManager extends Component {
     playerOne: "",
     playerTwo: "",
     hasStarted: false,
-    screen: 3
+    screen: 0
   };
 
   updateNameOne = evt => this.setState({ playerOne: evt.target.value });

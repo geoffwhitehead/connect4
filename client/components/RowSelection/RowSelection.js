@@ -1,5 +1,5 @@
 import React from "react";
-import css from "./RowSelection.css";
+import css from "./RowSelection.scss";
 
 export default ({ selectColumn, disabled }) => {
   const handleSelect = index => !disabled && selectColumn(index);
