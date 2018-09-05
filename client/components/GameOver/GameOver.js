@@ -8,14 +8,14 @@ import { PROCESS_WINNER } from "graphql/mutations";
 
 export default class GameOver extends React.Component {
   render() {
-    const { name, onClickScores, onClose } = this.props;
+    const { winnerName, onClickScores, onClose } = this.props;
     return (
       <Mutation mutation={PROCESS_WINNER}>
         {(processWinner, { data, loading, error, called, ...rest }) => {
-          !called && processWinner({ variables: { name: name } });
+          !called && processWinner({ variables: { name: winnerName } });
           return (
             <div className={css.text}>
-              <h1>{`${name} wins!`}</h1>
+              <h1>{`${winnerName} wins!`}</h1>
               <h2>Congratulations</h2>
               {data && (
                 <p>{`you now have ${data.processWinner.wins} ${

@@ -95,7 +95,7 @@ class App extends React.Component {
 
                                   <ModalPortal open={winner}>
                                     <GameOver
-                                      name={winnerName}
+                                      winnerName={winnerName}
                                       onClickScores={this.toggleScoresModal}
                                       onClose={onRestart}
                                     />
