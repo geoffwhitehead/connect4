@@ -2,12 +2,10 @@ import React from "react";
 import css from "./GameOver.scss";
 import Button from "components/common/Button/Button";
 import ButtonAnimatedIcon from "components/common/ButtonAnimatedIcon/ButtonAnimatedIcon";
-import { Mutation, renderToStringWithData } from "react-apollo";
-import { graphql } from "react-apollo";
+import { Mutation } from "react-apollo";
 import { PROCESS_WINNER } from "graphql/mutations";
 import Animation from "react-lottie";
 import * as animationData from "assets/animations/trophy.json";
-
 
 const defaultOptions = {
   loop: false,
@@ -23,8 +21,11 @@ export default class GameOver extends React.Component {
     const { winnerName, onClickScores, onClose } = this.props;
     return (
       <Mutation mutation={PROCESS_WINNER}>
-        {(processWinner, { data, loading, error, called, ...rest }) => {
-          !called && processWinner({ variables: { name: winnerName } });
+        {(processWinner, { data, loading, error, called, client, ...rest }) => {
+          !called &&
+            processWinner({ variables: { name: winnerName } }).then(() =>
+              client.resetStore()
+            );
           return (
             <div className={css.text}>
               <Animation
