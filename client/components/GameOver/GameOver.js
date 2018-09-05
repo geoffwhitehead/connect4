@@ -5,6 +5,18 @@ import ButtonAnimatedIcon from "components/common/ButtonAnimatedIcon/ButtonAnima
 import { Mutation, renderToStringWithData } from "react-apollo";
 import { graphql } from "react-apollo";
 import { PROCESS_WINNER } from "graphql/mutations";
+import Animation from "react-lottie";
+import * as animationData from "assets/animations/trophy.json";
+
+
+const defaultOptions = {
+  loop: false,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
 
 export default class GameOver extends React.Component {
   render() {
@@ -15,6 +27,13 @@ export default class GameOver extends React.Component {
           !called && processWinner({ variables: { name: winnerName } });
           return (
             <div className={css.text}>
+              <Animation
+                options={defaultOptions}
+                onClick={null}
+                isClickToPauseDisabled
+                height={155}
+                width={350}
+              />
               <h1>{`${winnerName} wins!`}</h1>
               <h2>Congratulations</h2>
               {data && (

@@ -3,14 +3,17 @@
   height: 100px;
   h1 {
     transition: color 0.5s linear;
+    transition: transform 0.5s ease-in-out;
     line-height: 100px;
     font-size: 4rem;
     text-shadow: 2px 2px #888888;
   }
 }
 .p1 {
-  color: darkred
+  color: darkred;
+  transform: translateX(-100px)
 }
 .p2 {
-  color: goldenrod
+  color: goldenrod;
+  transform: translateX(100px)
 }
