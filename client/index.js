@@ -14,6 +14,7 @@ import Nav from "components/Nav/Nav";
 import GameOver from "components/GameOver/GameOver";
 import ModalPortal from "components/common/Modal/Portal";
 import Scores from "components/Scores/Scores";
+import TurnDisplay from "components/TurnDisplay/TurnDisplay";
 
 import css from "./index.scss";
 
@@ -70,11 +71,22 @@ class App extends React.Component {
                         <div>
                           <BoardManager
                             show={screen === 3}
-                            render={({ board, addToken, winner }) => {
+                            render={({
+                              board,
+                              addToken,
+                              winner,
+                              currentPlayer
+                            }) => {
+                              const playerName =
+                                currentPlayer === 1 ? playerOne : playerTwo;
                               const winnerName =
                                 winner === 1 ? playerOne : playerTwo;
                               return (
                                 <div>
+                                  <TurnDisplay
+                                    name={playerName}
+                                    player={currentPlayer}
+                                  />
                                   <RowSelection
                                     disabled={winner}
                                     selectColumn={addToken}

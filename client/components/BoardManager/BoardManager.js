@@ -38,7 +38,6 @@ export default class BoardManager extends Component {
 
   // returns true if the placement is valid and a token is successfully added to the board
   addToken = col => {
-    console.log(this.state.turn);
     let player = (this.state.turn % 2) + 1;
     if (!this.isValidColumn(col)) return false;
     let row = this.findOpenRowPosition(col);
@@ -81,6 +80,10 @@ export default class BoardManager extends Component {
   };
 
   render() {
-    return this.props.render({ ...this.state, addToken: this.addToken });
+    return this.props.render({
+      ...this.state,
+      addToken: this.addToken,
+      currentPlayer: (this.state.turn % 2) + 1
+    });
   }
 }
