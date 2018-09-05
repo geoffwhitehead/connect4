@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const PlayerSchema = new Schema({
   name: { type: String },
-  wins: { type: Number, default: 0 }
+  wins: { type: Number, default: 1 } // a player is only created when winning the game.
 });
 
 PlayerSchema.statics.win = function(id) {
@@ -13,6 +13,12 @@ PlayerSchema.statics.win = function(id) {
     ++player.wins;
     return player.save();
   });
+};
+
+PlayerSchema.statics.findByName = function(name) {
+  const Player = mongoose.model("player");
+
+  return Player.findOne({ name: name }).then(player => player);
 };
 
 mongoose.model("player", PlayerSchema);

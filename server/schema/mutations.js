@@ -7,13 +7,15 @@ const PlayerType = require("./player_type");
 const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    addPlayer: {
+    processWinner: {
       type: PlayerType,
       args: {
         name: { type: GraphQLString }
       },
       resolve(parentValue, { name }) {
-        return new Player({ name }).save();
+        return Player.findByName(name).then(
+          p => (p ? Player.win(p._id) : new Player({ name }).save())
+        );
       }
     },
     addWin: {

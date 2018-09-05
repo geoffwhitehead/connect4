@@ -6,6 +6,9 @@ const Player = mongoose.model("player");
  */
 
 function seedPlayers(req, res) {
+  // remove all records
+  Player.collection.drop();
+
   // create some players
   const players = [
     { name: "SON", wins: 1 },

@@ -18,9 +18,10 @@
   display: grid;
   grid-template-columns: auto auto auto;
   width: 100vw;
-  height: auto;
+  height: 100%;
   align-self: center;
   justify-items: center;
+  align-items: center;
 }
 .content {
   grid-column: 2;

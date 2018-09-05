@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLNonNull } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLList,
+  GraphQLID,
+  GraphQLNonNull
+} = graphql;
 const PlayerType = require("./player_type");
 const Player = mongoose.model("player");
 
@@ -19,8 +25,16 @@ const RootQuery = new GraphQLObjectType({
       reolve(parentValue, { id }) {
         return Player.findById(id);
       }
+    },
+    topTen: {
+      type: new GraphQLList(PlayerType),
+      resolve() {
+        return Player.find({})
+          .sort("-wins")
+          .limit(10);
+      }
     }
   })
 });
 
-module.exports = RootQuery
+module.exports = RootQuery;

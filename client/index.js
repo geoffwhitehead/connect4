@@ -11,9 +11,9 @@ import BoardManager from "components/BoardManager/BoardManager";
 import GameBoard from "components/GameBoard/GameBoard";
 import RowSelection from "components/RowSelection/RowSelection";
 import Nav from "components/Nav/Nav";
-import WinnerText from "components/WinnerText/WinnerText";
+import GameOver from "components/GameOver/GameOver";
 import ModalPortal from "components/common/Modal/Portal";
-import PlayerList from "components/PlayerList";
+import Scores from "components/Scores/Scores";
 
 import css from "./index.scss";
 
@@ -23,6 +23,9 @@ class App extends React.Component {
   state = {
     scoresOpen: false
   };
+
+  toggleScoresModal = () =>
+    this.setState({ scoresOpen: !this.state.scoresOpen });
 
   render() {
     console.log("scores ", this.state.scoresOpen);
@@ -38,7 +41,8 @@ class App extends React.Component {
                 playerTwo,
                 updateNameOne,
                 updateNameTwo,
-                screen
+                screen,
+                onRestart
               }) => {
                 console.log("start", playerOne, playerTwo, screen);
 
@@ -67,6 +71,8 @@ class App extends React.Component {
                           <BoardManager
                             show={screen === 3}
                             render={({ board, addToken, winner }) => {
+                              const winnerName =
+                                winner === 1 ? playerOne : playerTwo;
                               return (
                                 <div>
                                   <RowSelection
@@ -75,22 +81,15 @@ class App extends React.Component {
                                   />
                                   <GameBoard disabled={winner} board={board} />
 
-                                  <ModalPortal
-                                    open={winner}
-                                    // onClose={this.toggleAuthority}
-                                  >
-                                    <WinnerText
-                                      // onClose={this.toggleAuthority}
-                                      onClickScores={() =>
-                                        this.setState({ scoresOpen: true })
-                                      }
+                                  <ModalPortal open={winner}>
+                                    <GameOver
+                                      name={winnerName}
+                                      onClickScores={this.toggleScoresModal}
+                                      onClose={onRestart}
                                     />
                                   </ModalPortal>
-                                  <ModalPortal
-                                    open={this.state.scoresOpen}
-                                    // onClose={this.toggleAuthority}
-                                  >
-                                    <PlayerList />
+                                  <ModalPortal open={this.state.scoresOpen}>
+                                    <Scores onClose={this.toggleScoresModal} />
                                   </ModalPortal>
                                 </div>
                               );
