@@ -5,7 +5,7 @@ export default ({ name, player }) => {
   const playerStyle = player === 1 ? css.p1 : css.p2;
   return (
     <div className={css.player}>
-      <h1 className={playerStyle}>{name}</h1>
+      <h1 className={playerStyle}>{name || `P0${player}`}</h1>
     </div>
   );
 };
