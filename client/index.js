@@ -73,6 +73,7 @@ class App extends React.Component {
                           <div>
                             <BoardManager
                               show={screen === 3}
+                              ai={true}
                               render={({
                                 board,
                                 addToken,
