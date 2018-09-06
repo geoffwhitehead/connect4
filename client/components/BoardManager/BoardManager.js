@@ -60,42 +60,94 @@ export default class BoardManager extends Component {
     return true;
   };
 
+  calculateAIScoringArray = player => {
+    let arr = [0, 0, 0, 0, 0, 0, 0];
+
+    for (let col = 0; col < arr.length; col++) {
+      if (this.isValidColumn(col)) {
+        let row = this.findOpenRowPosition(col);
+        let scores = [];
+        let pos;
+
+        scores.push(this.aiCheckTokens(player, 0, col, 1, 0, row, col));
+        scores.push(this.aiCheckTokens(player, row, 0, 0, 1, row, col));
+        pos = this.calcStartXY(row, col);
+        scores.push(
+          this.aiCheckTokens(player, pos.row, pos.col, 1, 1, row, col)
+        );
+        pos = this.calcStartXYFlipped(row, col);
+        scores.push(
+          this.aiCheckTokens(player, pos.row, pos.col, -1, 1, row, col)
+        );
+        arr[col] = _.max(scores);
+      } else {
+        arr[col] = -1;
+      }
+    }
+    return arr;
+  };
+
   aiTurn = () => {
     const { turn } = this.state;
     let player = (turn % 2) + 1;
-    let redArray = [0, 0, 0, 0, 0, 0, 0];
-    let yellowArray = [0, 0, 0, 0, 0, 0, 0];
+    let redArray = this.calculateAIScoringArray(RED_PLAYER);
+    let yellowArray = this.calculateAIScoringArray(YELLOW_PLAYER);
 
-    for (let col = 0; col < redArray.length; col++) {
-      if (this.isValidColumn(col)) {
-        // find open pos
-        let row = this.findOpenRowPosition(col);
-        // check current score in this position
-        // let h = this.aiCalcStartX(board, player, row, col);
-        let score = this.aiCheckTokens(RED_PLAYER, 0, col, 1, 0, row, col);
-        // console.log(col, ": score: ", score);
-        redArray[col] = score;
-      } else {
-        redArray[col] = -1;
-      }
-    }
+    // for (let col = 0; col < redArray.length; col++) {
+    //   if (this.isValidColumn(col)) {
+    //     // find open pos
+    //     let row = this.findOpenRowPosition(col);
+    //     let scores = [];
+    //     let pos;
+    //     // check current score in this position
+    //     // let h = this.aiCalcStartX(board, player, row, col);
+    //     scores.push(this.aiCheckTokens(RED_PLAYER, 0, col, 1, 0, row, col));
+    //     scores.push(this.aiCheckTokens(RED_PLAYER, row, 0, 0, 1, row, col));
+    //     pos = this.calcStartXY(row, col);
+    //     scores.push(
+    //       this.aiCheckTokens(RED_PLAYER, pos.row, pos.col, 1, 1, row, col)
+    //     );
 
-    console.log("red array: ", redArray);
+    //     pos = this.calcStartXYFlipped(row, col);
+    //     scores.push(
+    //       this.aiCheckTokens(RED_PLAYER, pos.row, pos.col, -1, 1, row, col)
+    //     );
 
-    for (let col = 0; col < yellowArray.length; col++) {
-      if (this.isValidColumn(col)) {
-        // find open pos
-        let row = this.findOpenRowPosition(col);
-        // check current score in this position
-        // let h = this.aiCalcStartX(board, player, row, col);
-        let score = this.aiCheckTokens(YELLOW_PLAYER, 0, col, 1, 0, row, col);
-        // console.log(col, ": score: ", score);
-        yellowArray[col] = score;
-      } else {
-        yellowArray[col] = -1;
-      }
-    }
-    console.log("yellow array: ", yellowArray);
+    //     // console.log(col, ": score: ", score);
+    //     redArray[col] = _.max(scores);
+    //   } else {
+    //     redArray[col] = -1;
+    //   }
+    // }
+
+    // console.log("red array: ", redArray);
+
+    // for (let col = 0; col < yellowArray.length; col++) {
+    //   if (this.isValidColumn(col)) {
+    //     // find open pos
+    //     let row = this.findOpenRowPosition(col);
+    //     let scores = [];
+    //     let pos;
+
+    //     // check current score in this position
+    //     // let h = this.aiCalcStartX(board, player, row, col);
+    //     scores.push(this.aiCheckTokens(YELLOW_PLAYER, 0, col, 1, 0, row, col));
+    //     scores.push(this.aiCheckTokens(YELLOW_PLAYER, row, 0, 0, 1, row, col));
+    //     pos = this.calcStartXY(row, col);
+    //     scores.push(
+    //       this.aiCheckTokens(YELLOW_PLAYER, pos.row, pos.col, 1, 1, row, col)
+    //     );
+    //     pos = this.calcStartXYFlipped(row, col);
+    //     scores.push(
+    //       this.aiCheckTokens(YELLOW_PLAYER, pos.row, pos.col, -1, 1, row, col)
+    //     );
+    //     // console.log(col, ": score: ", score);
+    //     yellowArray[col] = _.max(scores);
+    //   } else {
+    //     yellowArray[col] = -1; // position not available
+    //   }
+    // }
+    // console.log("yellow array: ", yellowArray);
     // for red player then yellow player
     // for each column
 
@@ -107,24 +159,29 @@ export default class BoardManager extends Component {
     // find greatest count of consequtive tokens
 
     // store the result in array. index is column and number is count.
+
+    let pos = this.determineAIMove(redArray, yellowArray);
+    this.dropToken(pos.row, pos.col, player);
+
+    if (this.checkWin(pos.row, pos.col, player))
+      this.setState({ winner: player });
+    this.setState({ turn: turn + 1 });
+  };
+
+  determineAIMove = (redArray, yellowArray) => {
     let col;
-    if (_.max(redArray) === 3) {
+    if (_.max(redArray) === 3 && _.max(yellowArray) < 3) {
       col = this.findRandomMax(redArray);
     } else {
       col = this.findRandomMax(yellowArray);
     }
-    let row = this.findOpenRowPosition(col);
-    this.dropToken(row, col, player);
 
-    if (this.checkWin(row, col, player)) this.setState({ winner: player });
-    this.setState({ turn: turn + 1 });
+    return { col, row: this.findOpenRowPosition(col) };
   };
 
   findRandomMax = arr => {
     let max = _.max(arr);
     let indexes = arr.reduce((acc, cur, i) => {
-      // console.log('index ', i);
-      // console.log('acc ', acc);
       if (cur === max) acc.push(i);
       return acc;
     }, []);
@@ -163,7 +220,8 @@ export default class BoardManager extends Component {
       count++;
     } else {
       console.log("2: ", "dont inc counter");
-      console.log(" ----- vals ", row, stX, col, stY, oFlag);
+      console.log(" ----- board ", this.state.board[row][col], player);
+      console.log(" ----- vals ", row, stX, col, stY, oFlag, " cnt ", count);
       if (row !== stX || col !== stY) {
         console.log("3: ", "not origin");
 

@@ -16,6 +16,7 @@ import ModalPortal from "components/common/Modal/Portal";
 import Scores from "components/Scores/Scores";
 import TurnDisplay from "components/TurnDisplay/TurnDisplay";
 import ErrorBoundary from "components/common/ErrorBoundary/ErrorBoundary";
+import Button from "components/common/Button/Button";
 
 import css from "./index.scss";
 
@@ -23,11 +24,15 @@ const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
 
 class App extends React.Component {
   state = {
-    scoresOpen: false
+    scoresOpen: false,
+    gameOverOpen: true
   };
 
   toggleScoresModal = () =>
     this.setState({ scoresOpen: !this.state.scoresOpen });
+
+  toggleGameOverModal = () =>
+    this.setState({ gameOverOpen: !this.state.gameOverOpen });
 
   render() {
     console.log("scores ", this.state.scoresOpen);
@@ -101,11 +106,14 @@ class App extends React.Component {
                                       board={board}
                                     />
 
-                                    <ModalPortal open={winner}>
+                                    <ModalPortal
+                                      open={winner && this.state.gameOverOpen}
+                                    >
                                       <GameOver
                                         winnerName={winnerName}
                                         onClickScores={this.toggleScoresModal}
-                                        onClose={onRestart}
+                                        onClose={this.toggleGameOverModal}
+                                        onRestart={onRestart}
                                       />
                                     </ModalPortal>
                                     <ModalPortal open={this.state.scoresOpen}>
@@ -113,6 +121,13 @@ class App extends React.Component {
                                         onClose={this.toggleScoresModal}
                                       />
                                     </ModalPortal>
+
+                                    {winner && !this.state.gameOverOpen ? (
+                                      <Button
+                                        text="Show menu"
+                                        onClick={this.toggleGameOverModal}
+                                      />
+                                    ) : null}
                                   </div>
                                 );
                               }}

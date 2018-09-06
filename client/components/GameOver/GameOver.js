@@ -18,7 +18,7 @@ const defaultOptions = {
 
 export default class GameOver extends React.Component {
   render() {
-    const { winnerName, onClickScores, onClose } = this.props;
+    const { winnerName, onClickScores, onClose, onRestart } = this.props;
     return (
       <Mutation mutation={PROCESS_WINNER}>
         {(processWinner, { data, loading, error, called, client, ...rest }) => {
@@ -43,12 +43,13 @@ export default class GameOver extends React.Component {
                 }`}</p>
               )}
               <div>
+                <Button text="Hide" onClick={onClose} />
                 <Button text="View high scores" onClick={onClickScores} />
                 <ButtonAnimatedIcon
                   iconName="redo"
                   text="Restart"
                   loading={loading}
-                  onClick={onClose}
+                  onClick={onRestart}
                 />
               </div>
             </div>
