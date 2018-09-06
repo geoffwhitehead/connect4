@@ -1,7 +1,7 @@
 import React from "react";
 import Animation from "react-lottie";
 import * as animationData from "assets/animations/unhappy_fries.json";
-import css from "./Lose.scss";
+import css from "./Draw.scss";
 
 const defaultOptions = {
   loop: false,
@@ -12,9 +12,9 @@ const defaultOptions = {
   }
 };
 
-export default ({ winnerName }) => {
+export default () => {
   return (
-    <div className={css.lose}>
+    <div className={css.draw}>
       <Animation
         options={defaultOptions}
         onClick={null}
@@ -22,9 +22,8 @@ export default ({ winnerName }) => {
         height={300}
         width={250}
       />
-      <h1>{`${winnerName} wins!`}</h1>
       <h2>Uh oh</h2>
-      <p>You lost, try again?</p>
+      <p>A draw, try again?</p>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { Mutation } from "react-apollo";
 import { PROCESS_WINNER } from "graphql/mutations";
 import Win from "./sub-components/Win/Win";
 import Lose from "./sub-components/Lose/Lose";
+import Draw from "./sub-components/Draw/Draw";
 
 export default class GameOver extends React.Component {
   render() {
@@ -37,7 +38,7 @@ export default class GameOver extends React.Component {
                     }
                   />
                 )}
-              {draw && <p>Draw</p>}
+              {draw && <Draw />}
               {lose && <Lose winnerName={winnerName} />}
               <div className={css.buttons}>
                 <Button text="Hide" onClick={onClose} />
