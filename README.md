@@ -1,10 +1,13 @@
 # Connect 4
 
-Browser connect4 game
+Browser connect4 game that records high scores.
 
 The game can be played with 2 human players or with 1 AI opponent
 
-# Setup
+### Tech
+React, GraphQL, Node, Mongo
+
+### Setup
 
   - Clone the repo
   - ```yarn install```
