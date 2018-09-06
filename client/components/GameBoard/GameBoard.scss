@@ -4,8 +4,9 @@
   width: calc(7 * 5.5rem + 6*5px);
   grid-template: repeat(6, 5.5rem) / repeat(7, 5.5rem);
   grid-gap: 5px;
-  background-color: grey;
+  background-color: blue;
   margin-bottom: 15px;
+  outline: 5px solid darkblue;
 }
 
 .disabled {
@@ -15,4 +16,6 @@
 .cell {
   display: block;
   background-color: white;
+  border: 4px solid lightblue;
+  border-radius: 35px;
 }

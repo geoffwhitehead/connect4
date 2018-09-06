@@ -7,16 +7,16 @@ const webpackConfig = require("../webpack.config.js");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const schema = require("./schema/schema");
-const db = require("../mongoConfig");
+// const db = require("../mongoConfig");
 const seed = require("./seed");
 const app = express();
 const cors = require("cors");
 // mongolab URI
-const MONGO_URI = `mongodb://${db.user}:${
-  db.pass
-}@ds139341.mlab.com:39341/connect4`;
+const USER = 'geoffwhitehead';
+const PASS = 'connect1234';
+const MONGO_URI = `mongodb://${USER}:${PASS}@ds139341.mlab.com:39341/connect4`;
 
-if (!db.user || !db.pass) {
+if (!USER || !PASS) {
   throw new Error("You must provide database user and password");
 }
 
