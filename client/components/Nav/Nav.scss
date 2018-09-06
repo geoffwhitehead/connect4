@@ -1,8 +1,8 @@
 .nav {
-  background: linear-gradient(-45deg, #6793ca23, #9fbbc223, #a3b35f1f, #35835c3a);
+  // background: linear-gradient(-45deg, #6793ca23, #9fbbc223, #a3b35f1f, #35835c3a);
+  background: linear-gradient(-45deg, lightgrey, #FBD786, #DA4453);
+
 	background-size: 400% 400%;
-	-webkit-animation: Gradient 15s ease infinite;
-	-moz-animation: Gradient 15s ease infinite;
   animation: Gradient 15s ease infinite;
   box-shadow: 0px 2px 3px #888888;
   
@@ -16,4 +16,17 @@
 .header {
   line-height: 60px;
   
+}
+
+
+@keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
 }
