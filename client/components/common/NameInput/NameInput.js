@@ -24,7 +24,6 @@ export default ({
   ...rest
 }) => {
   const handleChange = evt => {
-    console.log(evt);
     evt.target.value.length < 4 && onChange(evt.target.value.toUpperCase());
   };
   const handleToggle = evt => {
