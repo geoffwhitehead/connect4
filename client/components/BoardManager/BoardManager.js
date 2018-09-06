@@ -6,6 +6,7 @@ const ROWS_COUNT = 6;
 const WIN_COUNT = 4;
 const RED_PLAYER = 1;
 const YELLOW_PLAYER = 2;
+const AI_PLAYER = 2;
 
 export default class BoardManager extends Component {
   state = {
@@ -40,26 +41,21 @@ export default class BoardManager extends Component {
   };
 
   // returns true if the placement is valid and a token is successfully added to the board
-  addToken = col => {
+  takeTurn = col => {
     const { turn } = this.state;
     const { ai } = this.props;
     let player = (turn % 2) + 1;
-    if (!this.isValidColumn(col)) return false;
-    let row = this.findOpenRowPosition(col);
-    this.dropToken(row, col, player);
-    if (this.checkWin(row, col, player)) this.setState({ winner: player });
-    console.log("turn: ", turn);
-    this.setState({ turn: turn + 1 }, () => {
-      // players turn over - if playing with AI, take AI turn before returning
-      console.log("CB turn ", turn, " ai ", ai);
-      if (ai) {
-        this.aiTurn();
-      }
-    });
+
+    if (!this.isValidColumn(col)) return false; // if this is an illegal placement - return
+    let row = this.findOpenRowPosition(col); // else find the next free row
+    this.dropToken(row, col, player); // insert token into board
+    if (this.checkWin(row, col, player)) this.setState({ winner: player }); // check if this was a winning move
+    this.setState({ turn: turn + 1 }, () => (ai ? this.aiTurn() : null)); // increment the turn counter and initiate AI turn - if AI is playing
 
     return true;
   };
 
+  // calculates where the best scoring moves are for the selected player
   calculateAIScoringArray = player => {
     let arr = [0, 0, 0, 0, 0, 0, 0];
 
@@ -87,87 +83,21 @@ export default class BoardManager extends Component {
     return arr;
   };
 
+  // iterates over all the methods responsible for an AI turn
   aiTurn = () => {
     const { turn } = this.state;
-    let player = (turn % 2) + 1;
-    let redArray = this.calculateAIScoringArray(RED_PLAYER);
-    let yellowArray = this.calculateAIScoringArray(YELLOW_PLAYER);
-
-    // for (let col = 0; col < redArray.length; col++) {
-    //   if (this.isValidColumn(col)) {
-    //     // find open pos
-    //     let row = this.findOpenRowPosition(col);
-    //     let scores = [];
-    //     let pos;
-    //     // check current score in this position
-    //     // let h = this.aiCalcStartX(board, player, row, col);
-    //     scores.push(this.aiCheckTokens(RED_PLAYER, 0, col, 1, 0, row, col));
-    //     scores.push(this.aiCheckTokens(RED_PLAYER, row, 0, 0, 1, row, col));
-    //     pos = this.calcStartXY(row, col);
-    //     scores.push(
-    //       this.aiCheckTokens(RED_PLAYER, pos.row, pos.col, 1, 1, row, col)
-    //     );
-
-    //     pos = this.calcStartXYFlipped(row, col);
-    //     scores.push(
-    //       this.aiCheckTokens(RED_PLAYER, pos.row, pos.col, -1, 1, row, col)
-    //     );
-
-    //     // console.log(col, ": score: ", score);
-    //     redArray[col] = _.max(scores);
-    //   } else {
-    //     redArray[col] = -1;
-    //   }
-    // }
-
-    // console.log("red array: ", redArray);
-
-    // for (let col = 0; col < yellowArray.length; col++) {
-    //   if (this.isValidColumn(col)) {
-    //     // find open pos
-    //     let row = this.findOpenRowPosition(col);
-    //     let scores = [];
-    //     let pos;
-
-    //     // check current score in this position
-    //     // let h = this.aiCalcStartX(board, player, row, col);
-    //     scores.push(this.aiCheckTokens(YELLOW_PLAYER, 0, col, 1, 0, row, col));
-    //     scores.push(this.aiCheckTokens(YELLOW_PLAYER, row, 0, 0, 1, row, col));
-    //     pos = this.calcStartXY(row, col);
-    //     scores.push(
-    //       this.aiCheckTokens(YELLOW_PLAYER, pos.row, pos.col, 1, 1, row, col)
-    //     );
-    //     pos = this.calcStartXYFlipped(row, col);
-    //     scores.push(
-    //       this.aiCheckTokens(YELLOW_PLAYER, pos.row, pos.col, -1, 1, row, col)
-    //     );
-    //     // console.log(col, ": score: ", score);
-    //     yellowArray[col] = _.max(scores);
-    //   } else {
-    //     yellowArray[col] = -1; // position not available
-    //   }
-    // }
-    // console.log("yellow array: ", yellowArray);
-    // for red player then yellow player
-    // for each column
-
-    // calc start pos vert
-    // calc start hoz
-    // calc start diag
-    // calc start diag flipped
-
-    // find greatest count of consequtive tokens
-
-    // store the result in array. index is column and number is count.
-
-    let pos = this.determineAIMove(redArray, yellowArray);
-    this.dropToken(pos.row, pos.col, player);
+    let player = (turn % 2) + 1; // determine current player - although for AI this should always equal 2
+    let redArray = this.calculateAIScoringArray(RED_PLAYER); // best red moves
+    let yellowArray = this.calculateAIScoringArray(YELLOW_PLAYER); // best yellow moves
+    let pos = this.determineAIMove(redArray, yellowArray); // determine course of actions based on both players best moves
+    this.dropToken(pos.row, pos.col, player); // insert token into board at position
 
     if (this.checkWin(pos.row, pos.col, player))
       this.setState({ winner: player });
     this.setState({ turn: turn + 1 });
   };
 
+  // based on the best moves available - choose which to do.
   determineAIMove = (redArray, yellowArray) => {
     let col;
     if (_.max(redArray) === 3 && _.max(yellowArray) < 3) {
@@ -179,6 +109,7 @@ export default class BoardManager extends Component {
     return { col, row: this.findOpenRowPosition(col) };
   };
 
+  // pick random max value from array and return its index
   findRandomMax = arr => {
     let max = _.max(arr);
     let indexes = arr.reduce((acc, cur, i) => {
@@ -192,14 +123,8 @@ export default class BoardManager extends Component {
   isOutsideBounds = (row, col) =>
     col >= COLUMNS_COUNT || col <= -1 || row >= ROWS_COUNT || row <= -1;
 
-  // aiCalcStartX = (board, player, row, col) => {
-  //   let val = board[row][col];
-  //   if(this.isOutsideBounds(row, col)) return col + 1;
-  //   if(val != player && row !)
-  // }
-
   // returns true if it finds 4 consecutive tokens
-  // rAdj and cAdj are the amounts to increment the row ad column by. This determines the line direction
+  // rAdj and cAdj are the amounts to increment the row ad column by. This determines the line direction.
   aiCheckTokens = (
     player,
     row,
@@ -211,39 +136,23 @@ export default class BoardManager extends Component {
     oFlag = false,
     count = 0
   ) => {
-    let stop = false;
     if (row === stX && col === stY) oFlag = true; //have we intersected hitOrigin?
     if (count === WIN_COUNT - 1 && oFlag) return count; // if 3 consequetive tokens and intersected origin
     if (this.isOutsideBounds(row, col)) return count; // hit the edge
     if (this.state.board[row][col] === player) {
-      console.log("1: ", "inc counter");
       count++;
     } else {
-      console.log("2: ", "dont inc counter");
-      console.log(" ----- board ", this.state.board[row][col], player);
-      console.log(" ----- vals ", row, stX, col, stY, oFlag, " cnt ", count);
       if (row !== stX || col !== stY) {
-        console.log("3: ", "not origin");
-
         // not occupied by player token and not on origin
         if (oFlag) {
-          console.log("4: ", "origin flagged already");
-
           // if past the origin
-          console.log("---- ");
-          stop = true;
-          // return count;
+          return count;
         } else {
-          // were currently before origin
-          console.log("5: ", "reset count");
           count = 0; // reset the count
         }
       } else {
-        console.log("6: ", "is origin");
       }
     }
-    console.log("---- ");
-    if (stop) return count;
     return this.aiCheckTokens(
       player,
       row + rAdj,
@@ -283,8 +192,7 @@ export default class BoardManager extends Component {
   // rAdj and cAdj are the amounts to increment the row ad column by. This determines the line direction
   checkTokens = (player, row, col, rAdj, cAdj, count = 0) => {
     if (count === WIN_COUNT) return true;
-    if (col >= COLUMNS_COUNT || col <= -1 || row >= ROWS_COUNT || row <= -1)
-      return false;
+    if (this.isOutsideBounds(row, col)) return false;
     this.state.board[row][col] === player ? count++ : (count = 0);
     return this.checkTokens(player, row + rAdj, col + cAdj, rAdj, cAdj, count);
   };
@@ -292,8 +200,10 @@ export default class BoardManager extends Component {
   render() {
     return this.props.render({
       ...this.state,
-      addToken: this.addToken,
-      currentPlayer: (this.state.turn % 2) + 1
+      takeTurn: this.takeTurn,
+      currentPlayer: (this.state.turn % 2) + 1,
+      draw: this.state.turn === ROWS_COUNT * COLUMNS_COUNT,
+      lose: this.props.ai && this.state.winner === AI_PLAYER
     });
   }
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import Input from "components/common/Input/Input";
 import Animation from "react-lottie";
+import Checkbox from "components/common/Checkbox/Checkbox";
+import css from "./NameInput.scss";
 import * as animationData from "assets/animations/dino_dance.json";
 
 const defaultOptions = {
@@ -12,9 +14,9 @@ const defaultOptions = {
   }
 };
 
-export default ({ next, show, ...rest }) => {
+export default ({ next, show, isToggled, onToggle, toggleLabel, ...rest }) => {
   return show ? (
-    <div>
+    <div className={css.input}>
       <Animation
         options={defaultOptions}
         onClick={null}
@@ -32,6 +34,16 @@ export default ({ next, show, ...rest }) => {
           onClick: next
         }}
       />
+      {onToggle && (
+        <div className={css.toggle}>
+          <Checkbox
+            toggle
+            label={toggleLabel}
+            checked={isToggled}
+            onClick={onToggle}
+          />
+        </div>
+      )}
     </div>
   ) : null;
 };

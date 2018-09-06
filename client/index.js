@@ -35,7 +35,7 @@ class App extends React.Component {
     this.setState({ gameOverOpen: !this.state.gameOverOpen });
 
   render() {
-    console.log("scores ", this.state.scoresOpen);
+    const { scoresOpen, gameOverOpen } = this.state;
     return (
       <ApolloProvider client={client}>
         <div className={css.grid}>
@@ -50,10 +50,10 @@ class App extends React.Component {
                   updateNameOne,
                   updateNameTwo,
                   screen,
-                  onRestart
+                  onRestart,
+                  ai,
+                  toggleAI
                 }) => {
-                  console.log("start", playerOne, playerTwo, screen);
-
                   return (
                     <div className={css.innerGrid}>
                       <div className={css.content}>
@@ -73,17 +73,22 @@ class App extends React.Component {
                           onChange={updateNameTwo}
                           value={playerTwo}
                           next={next}
+                          onToggle={toggleAI}
+                          isToggled={ai}
+                          toggleLabel="Enable AI"
                         />
                         {screen === 3 && (
                           <div>
                             <BoardManager
                               show={screen === 3}
-                              ai={true}
+                              ai={ai}
                               render={({
                                 board,
-                                addToken,
+                                takeTurn,
                                 winner,
-                                currentPlayer
+                                currentPlayer,
+                                draw,
+                                lose
                               }) => {
                                 const playerName =
                                   currentPlayer === 1 ? playerOne : playerTwo;
@@ -91,6 +96,8 @@ class App extends React.Component {
                                   winner === 1
                                     ? playerOne || "P01"
                                     : playerTwo || "P02";
+
+                                const gameOver = winner || draw || lose;
                                 return (
                                   <div>
                                     <TurnDisplay
@@ -98,31 +105,33 @@ class App extends React.Component {
                                       player={currentPlayer}
                                     />
                                     <RowSelection
-                                      disabled={winner}
-                                      selectColumn={addToken}
+                                      disabled={gameOver}
+                                      selectColumn={takeTurn}
                                     />
                                     <GameBoard
-                                      disabled={winner}
+                                      disabled={gameOver}
                                       board={board}
                                     />
 
                                     <ModalPortal
-                                      open={winner && this.state.gameOverOpen}
+                                      open={gameOver && gameOverOpen}
                                     >
                                       <GameOver
                                         winnerName={winnerName}
                                         onClickScores={this.toggleScoresModal}
                                         onClose={this.toggleGameOverModal}
                                         onRestart={onRestart}
+                                        draw={draw}
+                                        lose={lose}
                                       />
                                     </ModalPortal>
-                                    <ModalPortal open={this.state.scoresOpen}>
+                                    <ModalPortal open={scoresOpen}>
                                       <Scores
                                         onClose={this.toggleScoresModal}
                                       />
                                     </ModalPortal>
 
-                                    {winner && !this.state.gameOverOpen ? (
+                                    {gameOver && !gameOverOpen ? (
                                       <Button
                                         text="Show menu"
                                         onClick={this.toggleGameOverModal}

@@ -4,7 +4,8 @@ export default class GameManager extends Component {
   state = {
     playerOne: "",
     playerTwo: "",
-    screen: 0
+    screen: 0,
+    ai: false
   };
 
   updateNameOne = evt =>
@@ -19,13 +20,16 @@ export default class GameManager extends Component {
 
   handleRestart = () => this.setState({ screen: 0 });
 
+  handleToggleAI = () => this.setState({ ai: !this.state.ai });
+
   render() {
     return this.props.render({
       ...this.state,
       updateNameOne: this.updateNameOne,
       updateNameTwo: this.updateNameTwo,
       next: this.incrementScreen,
-      onRestart: this.handleRestart
+      onRestart: this.handleRestart,
+      toggleAI: this.handleToggleAI
     });
   }
 }

@@ -4,45 +4,42 @@ import Button from "components/common/Button/Button";
 import ButtonAnimatedIcon from "components/common/ButtonAnimatedIcon/ButtonAnimatedIcon";
 import { Mutation } from "react-apollo";
 import { PROCESS_WINNER } from "graphql/mutations";
-import Animation from "react-lottie";
-import * as animationData from "assets/animations/trophy.json";
-
-const defaultOptions = {
-  loop: false,
-  autoplay: true,
-  animationData: animationData,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice"
-  }
-};
+import Win from "./sub-components/Win/Win";
+import Lose from "./sub-components/Lose/Lose";
 
 export default class GameOver extends React.Component {
   render() {
-    const { winnerName, onClickScores, onClose, onRestart } = this.props;
+    const {
+      winnerName,
+      onClickScores,
+      onClose,
+      onRestart,
+      draw,
+      lose
+    } = this.props;
+
     return (
       <Mutation mutation={PROCESS_WINNER}>
         {(processWinner, { data, loading, error, called, client, ...rest }) => {
-          !called &&
+          const shouldSave = winnerName && !lose && !called;
+          shouldSave &&
             processWinner({ variables: { name: winnerName } }).then(() =>
               client.resetStore()
             );
           return (
             <div className={css.text}>
-              <Animation
-                options={defaultOptions}
-                onClick={null}
-                isClickToPauseDisabled
-                height={155}
-                width={350}
-              />
-              <h1>{`${winnerName} wins!`}</h1>
-              <h2>Congratulations</h2>
-              {data && (
-                <p>{`you now have ${data.processWinner.wins} ${
-                  data.processWinner.wins > 1 ? "wins!" : "win!"
-                }`}</p>
-              )}
-              <div>
+              {!draw &&
+                !lose && (
+                  <Win
+                    winnerName={winnerName}
+                    wins={
+                      !error && !loading && called && data.processWinner.wins
+                    }
+                  />
+                )}
+              {draw && <p>Draw</p>}
+              {lose && <Lose winnerName={winnerName} />}
+              <div className={css.buttons}>
                 <Button text="Hide" onClick={onClose} />
                 <Button text="View high scores" onClick={onClickScores} />
                 <ButtonAnimatedIcon
