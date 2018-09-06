@@ -125,45 +125,26 @@ export default class BoardManager extends Component {
 
   // returns true if it finds 4 consecutive tokens
   // rAdj and cAdj are the amounts to increment the row ad column by. This determines the line direction.
-  aiCheckTokens = (
-    player,
-    row,
-    col,
-    rAdj,
-    cAdj,
-    stX,
-    stY,
-    oFlag = false,
-    count = 0
-  ) => {
-    if (row === stX && col === stY) oFlag = true; //have we intersected hitOrigin?
-    if (count === WIN_COUNT - 1 && oFlag) return count; // if 3 consequetive tokens and intersected origin
+  // rAdj / cAdj = row and column adjustment per iteration
+  // stX / stY = start position row and column
+  // ogn = flag - whether passed starting position
+  // prettier-ignore
+  aiCheckTokens = (player, row, col, rAdj, cAdj, stX, stY, f_origin = false, count = 0) => {
+    if (row === stX && col === stY) f_origin = true; //have we intersected hitOrigin?
+    if (count === WIN_COUNT - 1 && f_origin) return count; // if 3 consequetive tokens and intersected origin
     if (this.isOutsideBounds(row, col)) return count; // hit the edge
     if (this.state.board[row][col] === player) {
       count++;
     } else {
-      if (row !== stX || col !== stY) {
-        // not occupied by player token and not on origin
-        if (oFlag) {
-          // if past the origin
+      if (row !== stX || col !== stY) { // not occupied by player token and not on origin
+        if (f_origin) { // if past the origin
           return count;
         } else {
           count = 0; // reset the count
         }
-      } else {
       }
     }
-    return this.aiCheckTokens(
-      player,
-      row + rAdj,
-      col + cAdj,
-      rAdj,
-      cAdj,
-      stX,
-      stY,
-      oFlag,
-      count
-    );
+    return this.aiCheckTokens(player, row + rAdj, col + cAdj, rAdj, cAdj, stX, stY, f_origin, count);
   };
 
   checkWin = (row, col, player) => {
