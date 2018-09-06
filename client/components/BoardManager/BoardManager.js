@@ -7,6 +7,9 @@ const WIN_COUNT = 4;
 const RED_PLAYER = 1;
 const YELLOW_PLAYER = 2;
 const AI_PLAYER = 2;
+const MIN_WAIT = 1;
+const MAX_WAIT = 22;
+const WAIT_MULT = 100;
 
 export default class BoardManager extends Component {
   state = {
@@ -50,7 +53,14 @@ export default class BoardManager extends Component {
     let row = this.findOpenRowPosition(col); // else find the next free row
     this.dropToken(row, col, player); // insert token into board
     if (this.checkWin(row, col, player)) this.setState({ winner: player }); // check if this was a winning move
-    this.setState({ turn: turn + 1 }, () => (ai ? this.aiTurn() : null)); // increment the turn counter and initiate AI turn - if AI is playing
+    this.setState({ turn: turn + 1 }, () => {
+      if (ai) {
+        setTimeout(
+          () => this.aiTurn(),
+          _.random(MIN_WAIT, MAX_WAIT) * WAIT_MULT
+        ); // simulate wait
+      }
+    }); // increment the turn counter and initiate AI turn - if AI is playing
 
     return true;
   };

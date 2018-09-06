@@ -14,7 +14,25 @@ const defaultOptions = {
   }
 };
 
-export default ({ next, show, isToggled, onToggle, toggleLabel, ...rest }) => {
+export default ({
+  next,
+  show,
+  isToggled,
+  onToggle,
+  toggleLabel,
+  onChange,
+  ...rest
+}) => {
+  const handleChange = evt => {
+    console.log(evt);
+    evt.target.value.length < 4 && onChange(evt.target.value.toUpperCase());
+  };
+  const handleToggle = evt => {
+    isToggled
+      ? handleChange({ target: { value: "" } })
+      : handleChange({ target: { value: "AI" } });
+    onToggle();
+  };
   return show ? (
     <div className={css.input}>
       <Animation
@@ -26,6 +44,7 @@ export default ({ next, show, isToggled, onToggle, toggleLabel, ...rest }) => {
       />
       <Input
         {...rest}
+        onChange={handleChange}
         action={{
           color: "teal",
           labelPosition: "right",
@@ -40,7 +59,7 @@ export default ({ next, show, isToggled, onToggle, toggleLabel, ...rest }) => {
             toggle
             label={toggleLabel}
             checked={isToggled}
-            onClick={onToggle}
+            onClick={handleToggle}
           />
         </div>
       )}

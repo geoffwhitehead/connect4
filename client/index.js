@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { render } from "react-dom";
 
 import ApolloClient from "apollo-boost";
@@ -21,6 +21,8 @@ import Button from "components/common/Button/Button";
 import css from "./index.scss";
 
 const client = new ApolloClient({ uri: "http://localhost:4000/graphql" });
+const PLAYER_1 = 1;
+const PLAYER_2 = 2;
 
 class App extends React.Component {
   state = {
@@ -61,7 +63,7 @@ class App extends React.Component {
                         <NameInput
                           show={screen === 1}
                           label="Player One"
-                          placeholder="Enter your name..."
+                          placeholder="Enter your initials..."
                           onChange={updateNameOne}
                           value={playerOne}
                           next={next}
@@ -69,7 +71,7 @@ class App extends React.Component {
                         <NameInput
                           show={screen === 2}
                           label="Player Two"
-                          placeholder="Enter your name..."
+                          placeholder="Enter your initials..."
                           onChange={updateNameTwo}
                           value={playerTwo}
                           next={next}
@@ -91,7 +93,9 @@ class App extends React.Component {
                                 lose
                               }) => {
                                 const playerName =
-                                  currentPlayer === 1 ? playerOne : playerTwo;
+                                  currentPlayer === PLAYER_1
+                                    ? playerOne
+                                    : playerTwo;
                                 const winnerName =
                                   winner === 1
                                     ? playerOne || "P01"
@@ -99,13 +103,19 @@ class App extends React.Component {
 
                                 const gameOver = winner || draw || lose;
                                 return (
-                                  <div>
+                                  <Fragment>
                                     <TurnDisplay
                                       name={playerName}
                                       player={currentPlayer}
+                                      isAITurn={
+                                        ai && currentPlayer === PLAYER_2
+                                      }
                                     />
                                     <RowSelection
-                                      disabled={gameOver}
+                                      disabled={
+                                        gameOver ||
+                                        (ai && currentPlayer === PLAYER_2)
+                                      }
                                       selectColumn={takeTurn}
                                     />
                                     <GameBoard
@@ -137,7 +147,7 @@ class App extends React.Component {
                                         onClick={this.toggleGameOverModal}
                                       />
                                     ) : null}
-                                  </div>
+                                  </Fragment>
                                 );
                               }}
                             />

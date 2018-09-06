@@ -8,13 +8,9 @@ export default class GameManager extends Component {
     ai: false
   };
 
-  updateNameOne = evt =>
-    evt.target.value.length < 4 &&
-    this.setState({ playerOne: evt.target.value.toUpperCase() });
+  updateNameOne = val => this.setState({ playerOne: val });
 
-  updateNameTwo = evt =>
-    evt.target.value.length < 4 &&
-    this.setState({ playerTwo: evt.target.value.toUpperCase() });
+  updateNameTwo = val => this.setState({ playerTwo: val });
 
   incrementScreen = () => this.setState({ screen: this.state.screen + 1 });
 
